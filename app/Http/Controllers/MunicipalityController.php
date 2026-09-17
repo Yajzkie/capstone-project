@@ -54,7 +54,7 @@ public function destroy($id)
         $municipality->delete();
 
         // Redirect back with a success message
-        return redirect()->route('admin.municipal')->with('error', 'Municipality deleted successfully.');
+        return redirect()->route('admin.municipal')->with('success', 'Municipality deleted successfully.');
     }
 
 

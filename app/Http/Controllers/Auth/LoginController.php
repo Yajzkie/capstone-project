@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Don't forget to import Auth
-use Illuminate\Support\Facades\Session; // Import the Session facade
 
 class LoginController extends Controller
 {
@@ -72,10 +70,11 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function signOut()
+    public function signOut(Request $request)
     {
-        Session::flush();
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('login');
     }

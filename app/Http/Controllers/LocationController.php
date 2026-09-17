@@ -30,7 +30,7 @@ class LocationController extends Controller
         $municipalities = $municipalityCots->pluck('municipality');
         $totalCotsArray = $municipalityCots->pluck('total_cots');
         $percentages = $municipalityCots->map(function ($item) use ($totalCots) {
-            return ($item->total_cots / $totalCots) * 100; // Calculate percentage
+            return $totalCots > 0 ? ($item->total_cots / $totalCots) * 100 : 0; // Calculate percentage
         });
         
         // Get the total number of users

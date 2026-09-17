@@ -46,8 +46,8 @@
 
 <script>
 
-var municipalities = {!! json_encode($municipalities) !!};
-var totalCotsArray = {!! json_encode($totalCotsArray) !!};
+var municipalities = @json($municipalities);
+var totalCotsArray = @json($totalCotsArray);
 
 var baseColors = ['#f44336', '#4caf50', '#2196f3', '#ff9800', '#9c27b0', '#3f51b5'];
 
