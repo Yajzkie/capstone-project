@@ -16,28 +16,48 @@ class LocationController extends Controller
         return view('admin.location', compact('locations'));
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        // Get the sum of number_of_cots by municipality
-        $municipalityCots = Location::select('municipality', \DB::raw('sum(number_of_cots) as total_cots'))
-                                    ->groupBy('municipality')
-                                    ->get();
-        
-        // Calculate the total number of cots
-        $totalCots = $municipalityCots->sum('total_cots');
-        
+        $from = $request->input('from');
+        $to = $request->input('to');
+
+        $query = Location::query()
+            ->when($from, fn ($q) => $q->whereDate('date_of_sighting', '>=', $from))
+            ->when($to, fn ($q) => $q->whereDate('date_of_sighting', '<=', $to));
+
+        // Sum of number_of_cots per municipality (ignore blank municipalities)
+        $municipalityCots = (clone $query)
+            ->whereNotNull('municipality')
+            ->where('municipality', '!=', '')
+            ->select('municipality', \DB::raw('sum(number_of_cots) as total_cots'))
+            ->groupBy('municipality')
+            ->get();
+
+        // Cast to int so the chart receives numbers, not strings
+        $totalCots = (int) $municipalityCots->sum('total_cots');
+
         // Prepare data for the chart
-        $municipalities = $municipalityCots->pluck('municipality');
-        $totalCotsArray = $municipalityCots->pluck('total_cots');
+        $municipalities = $municipalityCots->pluck('municipality')->values();
+        $totalCotsArray = $municipalityCots->map(fn ($item) => (int) $item->total_cots)->values();
         $percentages = $municipalityCots->map(function ($item) use ($totalCots) {
             return $totalCots > 0 ? ($item->total_cots / $totalCots) * 100 : 0; // Calculate percentage
-        });
-        
+        })->values();
+
         // Get the total number of users
         $userCount = \App\Models\User::count();
-        
-        // Pass $totalCots to the view
-        return view('admin.index', compact('municipalities', 'totalCotsArray', 'percentages', 'userCount', 'totalCots'));
+
+        // Summary counts (respect the active date filter)
+        $totalSightings = (clone $query)->count();
+        $thisMonth = (clone $query)
+            ->whereYear('date_of_sighting', now()->year)
+            ->whereMonth('date_of_sighting', now()->month)
+            ->count();
+
+        // Pass data to the view
+        return view('admin.index', compact(
+            'municipalities', 'totalCotsArray', 'percentages',
+            'userCount', 'totalCots', 'totalSightings', 'thisMonth', 'from', 'to'
+        ));
     }
 
 
