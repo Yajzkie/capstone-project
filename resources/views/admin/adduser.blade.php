@@ -10,24 +10,24 @@
     <div class="card shadow-sm mb-4" style="border: none;">
         <h5 class="card-header" style="font-weight: 600;">Add New User</h5>
         <div class="card-body">
-            <form action="{{ route('users.store') }}" method="POST">
+            <form action="{{ route('users.store') }}" method="POST" autocomplete="off">
                 @csrf
                 <div class="row g-3">
                     <div class="col-md-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+                        <input type="text" class="form-control" id="name" name="name" autocomplete="off" required>
                     </div>
                     <div class="col-md-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                        <input type="email" class="form-control" id="email" name="email" autocomplete="off" required>
                     </div>
                     <div class="col-md-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" required>
                     </div>
                     <div class="col-md-3">
                         <label for="password_confirmation" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required>
                     </div>
                     <div class="col-md-3">
                         <label for="role" class="form-label">Role</label>
@@ -85,25 +85,25 @@
                 <tr class="collapse" id="editUser{{ $user->id }}">
                     <td colspan="4" class="p-3" style="background: #f8f9fa;">
                         <h6 class="mb-3">Edit: {{ $user->name }}</h6>
-                        <form action="{{ route('users.update', $user->id) }}" method="POST">
+                        <form action="{{ route('users.update', $user->id) }}" method="POST" autocomplete="off">
                             @csrf
                             @method('PUT')
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label for="editName{{ $user->id }}" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="editName{{ $user->id }}" name="name" value="{{ $user->name }}" required>
+                                    <input type="text" class="form-control" id="editName{{ $user->id }}" name="name" value="{{ $user->name }}" autocomplete="off" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="editEmail{{ $user->id }}" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="editEmail{{ $user->id }}" name="email" value="{{ $user->email }}" required>
+                                    <input type="email" class="form-control" id="editEmail{{ $user->id }}" name="email" value="{{ $user->email }}" autocomplete="off" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="editPassword{{ $user->id }}" class="form-label">New Password <span class="text-muted">(blank = unchanged)</span></label>
-                                    <input type="password" class="form-control" id="editPassword{{ $user->id }}" name="password">
+                                    <input type="password" class="form-control" id="editPassword{{ $user->id }}" name="password" autocomplete="new-password">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="editPasswordConfirmation{{ $user->id }}" class="form-label">Confirm New Password</label>
-                                    <input type="password" class="form-control" id="editPasswordConfirmation{{ $user->id }}" name="password_confirmation">
+                                    <input type="password" class="form-control" id="editPasswordConfirmation{{ $user->id }}" name="password_confirmation" autocomplete="new-password">
                                 </div>
                             </div>
                             <div class="mt-3">
