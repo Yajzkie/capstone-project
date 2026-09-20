@@ -85,7 +85,7 @@
         }
 
         .layout-page {
-            margin-top: 80px;
+            margin-top: 0;
         }
 
         .user-role {
@@ -114,12 +114,7 @@
             border-color: transparent;
         }
         .page-header {
-        position: fixed;
-        top: 70px; /* adjust based on navbar height */
-        left: 300px;
-        width: 100%;
         background-color: #fff;
-        z-index: 998;
         padding: 10px 0;
     }
 
@@ -135,41 +130,9 @@
         font-size: 1rem;
         color: #666;
     }
-
-    .layout-page {
-        margin-top: 160px; /* leave space for navbar + fixed title */
-    }
     </style>
 </head>
 <body>
-<!-- Navbar -->
-<nav class="layout-navbar container-xxl navbar navbar-expand navbar-detached align-items-center bg-navbar-theme fixed-top" id="layout-navbar">
-    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-        <i class="bx bx-menu bx-sm"></i>
-    </div>
-    
-    <!-- Collapsible Navbar Content -->
-    <div class="collapse navbar-collapse" id="navbarContentPage1">
-        <ul class="navbar-nav flex-row align-items-center ms-auto">
-            <li class="nav-item inbox-dropdown dropdown">
-                <a class="nav-link px-0" href="#" id="inboxDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-envelope" style="font-size: 1.5rem; margin-right: 10px;"></i> 
-                    <span class="badge bg-danger"></span> 
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="inboxDropdown">
-                    <li><a class="dropdown-item" href="#">New location added in:</a></li>
-                </ul>
-            </li>
-
-            <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                <span class="user-role">
-                    {{ Auth::user()->role->role_name }}
-                </span>
-            </li>
-        </ul>
-    </div>
-</nav>
- 
 <!-- Page Content -->
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
