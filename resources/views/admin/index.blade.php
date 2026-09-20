@@ -129,7 +129,7 @@
 var municipalities = @json($municipalities);
 var totalCotsArray = @json($totalCotsArray);
 
-var baseColors = ['#f44336', '#4caf50', '#2196f3', '#ff9800', '#9c27b0', '#3f51b5'];
+var baseColors = ['#0ea5e9', '#0056b3', '#14b8a6', '#f59e0b', '#8b5cf6', '#ef4444', '#10b981', '#f97316'];
 
 // Cycle the palette so colors stay consistent between loads
 var generatedColors = municipalities.map(function (_, i) {
@@ -150,18 +150,7 @@ var optionsPieChart = {
     labels: municipalities,
     colors: generatedColors,
     dataLabels: {
-        enabled: true,
-        style: {
-            fontSize: '16px',
-            fontWeight: 'bold',
-            colors: ['#fff']
-        },
-        formatter: function (val, opts) {
-            var totalCots = opts.series[opts.seriesIndex];
-            var sum = opts.w.globals.seriesTotals.reduce(function (a, b) { return a + b; }, 0);
-            var percentage = sum > 0 ? (totalCots / sum) * 100 : 0;
-            return totalCots + ' cots (' + percentage.toFixed(2) + '%)';
-        }
+        enabled: false
     },
     tooltip: {
         theme: 'dark',
@@ -174,9 +163,30 @@ var optionsPieChart = {
     plotOptions: {
         pie: {
             donut: {
-                size: '70%',
+                size: '80%',
                 labels: {
-                    show: false
+                    show: true,
+                    name: {
+                        show: true,
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#334155'
+                    },
+                    value: {
+                        show: true,
+                        fontSize: '26px',
+                        fontWeight: '800',
+                        color: '#0056b3'
+                    },
+                    total: {
+                        show: true,
+                        label: 'Total COTS',
+                        color: '#64748b',
+                        fontSize: '13px',
+                        formatter: function (w) {
+                            return w.globals.seriesTotals.reduce(function (a, b) { return a + b; }, 0);
+                        }
+                    }
                 }
             }
         }
@@ -184,12 +194,15 @@ var optionsPieChart = {
     legend: {
         position: 'bottom',
         horizontalAlign: 'center',
-        fontSize: '14px',
-        fontWeight: 'bold',
+        fontSize: '13px',
+        fontWeight: '600',
         markers: {
-            width: 15,
-            height: 15,
-            radius: 5
+            width: 12,
+            height: 12,
+            radius: 4
+        },
+        formatter: function (seriesName, opts) {
+            return seriesName + ' \u2014 ' + opts.w.globals.series[opts.seriesIndex] + ' cots';
         }
     }
 };
