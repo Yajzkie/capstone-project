@@ -163,6 +163,24 @@
             box-shadow: 0 10px 25px rgba(0, 40, 80, 0.12);
             z-index: 0;
         }
+
+        /* ---------- Mobile ---------- */
+        @media (max-width: 767.98px) {
+            .navbar-custom { padding: 8px 0; }
+            .navbar-custom .brand { font-size: 1rem; }
+
+            .hero {
+                background-attachment: scroll;
+                padding: 95px 0 50px;
+            }
+            .hero-chip { font-size: 0.78rem; padding: 5px 11px; }
+
+            .login-card { margin: 0 auto; }
+
+            .about { padding: 60px 0 40px; }
+            .about #map { height: 280px; }
+            .contact-bar { padding: 18px 16px; }
+        }
     </style>
 </head>
 <body>
