@@ -43,6 +43,17 @@ class LocationController extends Controller
             return $totalCots > 0 ? ($item->total_cots / $totalCots) * 100 : 0; // Calculate percentage
         })->values();
 
+        // Monthly sightings for the bar chart (respect the active date filter)
+        $monthly = (clone $query)
+            ->whereNotNull('date_of_sighting')
+            ->select(\DB::raw("DATE_FORMAT(date_of_sighting, '%Y-%m') as month"), \DB::raw('count(*) as total'))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $monthLabels = $monthly->map(fn ($m) => \Carbon\Carbon::createFromFormat('Y-m', $m->month)->format('M Y'))->values();
+        $monthCounts = $monthly->map(fn ($m) => (int) $m->total)->values();
+
         // Get the total number of users
         $userCount = \App\Models\User::count();
 
@@ -56,7 +67,8 @@ class LocationController extends Controller
         // Pass data to the view
         return view('admin.index', compact(
             'municipalities', 'totalCotsArray', 'percentages',
-            'userCount', 'totalCots', 'totalSightings', 'thisMonth', 'from', 'to'
+            'userCount', 'totalCots', 'totalSightings', 'thisMonth', 'from', 'to',
+            'monthLabels', 'monthCounts'
         ));
     }
 

@@ -1,6 +1,19 @@
 @extends('layouts.app')
 @section('content')
 
+<style>
+    .small-card-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin: 0 auto 10px;
+    }
+</style>
+
 <div class="content-wrapper">
     <div class="container d-flex justify-content-center align-items-center flex-column mt-5">
 
@@ -29,51 +42,73 @@
         </div>
 
         <!-- Stat cards -->
-        <div class="row w-100 justify-content-center">
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-lg rounded-lg text-center" style="background-color: #f7f7f7; border: none;">
-                    <div class="card-body" style="padding: 30px;">
-                        <h5 class="mb-3" style="font-weight: 600; color: #333;">Total Users</h5>
-                        <p style="font-size: 1.5rem; font-weight: bold; color: #4caf50;">{{ $userCount }} users</p>
+        <div class="row w-100 justify-content-center g-3">
+
+            <!-- Big: Total Users -->
+            <div class="col-md-6 mb-4">
+                <div class="card big-card h-100" style="border: none; border-radius: 18px; background: linear-gradient(135deg, #0ea5e9, #0056b3);">
+                    <div class="card-body d-flex align-items-center justify-content-between" style="padding: 28px 30px;">
+                        <div class="text-white">
+                            <h5 class="mb-2" style="font-weight: 600;">Total Users</h5>
+                            <p class="mb-0" style="font-size: 2.6rem; font-weight: 800; line-height: 1;">{{ $userCount }}</p>
+                            <small class="text-white-50">Registered accounts</small>
+                        </div>
+                        <i class="bx bxs-user text-white-50" style="font-size: 4rem;"></i>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-lg rounded-lg text-center" style="background-color: #f7f7f7; border: none;">
-                    <div class="card-body" style="padding: 30px;">
-                        <h5 class="mb-3" style="font-weight: 600; color: #333;">Total Sightings</h5>
-                        <p style="font-size: 1.5rem; font-weight: bold; color: #2196f3;">{{ $totalSightings }}</p>
+            <!-- Small: Total Sightings -->
+            <div class="col-md-2 mb-4">
+                <div class="card small-card h-100 text-center" style="border: none; border-radius: 18px;">
+                    <div class="card-body d-flex flex-column justify-content-center" style="padding: 20px;">
+                        <span class="small-card-icon" style="background: #dbeafe; color: #1d4ed8;"><i class="bx bxs-map-pin"></i></span>
+                        <p class="mb-0" style="font-size: 1.5rem; font-weight: 800; color: #1d4ed8;">{{ $totalSightings }}</p>
+                        <h6 class="mb-0 text-muted">Sightings</h6>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-lg rounded-lg text-center" style="background-color: #f7f7f7; border: none;">
-                    <div class="card-body" style="padding: 30px;">
-                        <h5 class="mb-3" style="font-weight: 600; color: #333;">Total Cots</h5>
-                        <p style="font-size: 1.5rem; font-weight: bold; color: #ff9800;">{{ $totalCots }} cots</p>
+            <!-- Small: Total COTS -->
+            <div class="col-md-2 mb-4">
+                <div class="card small-card h-100 text-center" style="border: none; border-radius: 18px;">
+                    <div class="card-body d-flex flex-column justify-content-center" style="padding: 20px;">
+                        <span class="small-card-icon" style="background: #fff7e6; color: #ea8a00;"><i class="bx bxs-star"></i></span>
+                        <p class="mb-0" style="font-size: 1.5rem; font-weight: 800; color: #ea8a00;">{{ $totalCots }}</p>
+                        <h6 class="mb-0 text-muted">COTS Count</h6>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-lg rounded-lg text-center" style="background-color: #f7f7f7; border: none;">
-                    <div class="card-body" style="padding: 30px;">
-                        <h5 class="mb-3" style="font-weight: 600; color: #333;">This Month</h5>
-                        <p style="font-size: 1.5rem; font-weight: bold; color: #9c27b0;">{{ $thisMonth }}</p>
+            <!-- Small: This Month -->
+            <div class="col-md-2 mb-4">
+                <div class="card small-card h-100 text-center" style="border: none; border-radius: 18px;">
+                    <div class="card-body d-flex flex-column justify-content-center" style="padding: 20px;">
+                        <span class="small-card-icon" style="background: #f3e8ff; color: #9333ea;"><i class="bx bxs-calendar"></i></span>
+                        <p class="mb-0" style="font-size: 1.5rem; font-weight: 800; color: #9333ea;">{{ $thisMonth }}</p>
+                        <h6 class="mb-0 text-muted">This Month</h6>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row w-100 justify-content-center">
+        <!-- Chart cards -->
+        <div class="row w-100 justify-content-center g-3">
             <div class="col-md-6 mb-4">
                 <div class="card shadow-lg rounded-lg" style="border: none;">
                     <div class="card-body">
                         <h5 class="text-center" style="font-weight: 600; color: #333;">COTS by Municipality</h5>
                         <div id="pieChart" style="height: 350px;"></div>
                         <p id="noData" class="text-center text-muted mt-3" style="display: none;">No sightings for the selected period.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-lg rounded-lg" style="border: none;">
+                    <div class="card-body">
+                        <h5 class="text-center" style="font-weight: 600; color: #333;">Sightings by Month</h5>
+                        <div id="barChart" style="height: 350px;"></div>
+                        <p id="noDataBar" class="text-center text-muted mt-3" style="display: none;">No sightings for the selected period.</p>
                     </div>
                 </div>
             </div>
@@ -165,6 +200,41 @@ if (municipalities.length > 0) {
 } else {
     document.querySelector("#pieChart").style.display = 'none';
     document.querySelector("#noData").style.display = 'block';
+}
+
+var monthLabels = @json($monthLabels);
+var monthCounts = @json($monthCounts);
+
+if (monthLabels.length > 0) {
+    var optionsBarChart = {
+        chart: {
+            type: 'bar',
+            height: 350,
+            toolbar: { show: false }
+        },
+        series: [{ name: 'Sightings', data: monthCounts }],
+        colors: ['#0056b3'],
+        plotOptions: {
+            bar: {
+                borderRadius: 6,
+                columnWidth: '50%'
+            }
+        },
+        dataLabels: { enabled: false },
+        xaxis: {
+            categories: monthLabels,
+            labels: { style: { fontSize: '12px', fontWeight: '600' } }
+        },
+        tooltip: {
+            theme: 'dark',
+            y: { formatter: function (val) { return val + ' sightings'; } }
+        },
+        grid: { borderColor: '#e7eaf0' }
+    };
+    new ApexCharts(document.querySelector("#barChart"), optionsBarChart).render();
+} else {
+    document.querySelector("#barChart").style.display = 'none';
+    document.querySelector("#noDataBar").style.display = 'block';
 }
 
 </script>
