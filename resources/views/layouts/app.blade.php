@@ -110,8 +110,8 @@
             padding: 4px;
             display: inline-flex;
         }
-        #layout-menu .layout-menu-toggle {
-            background: rgba(255, 255, 255, 0.15) !important;
+        #layout-menu .sidebar-toggle {
+            background: rgba(255, 255, 255, 0.15);
             color: #fff;
             border-radius: 50%;
             width: 30px;
@@ -119,7 +119,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
+        #layout-menu .sidebar-toggle:hover { background: rgba(255, 255, 255, 0.25); }
         #layout-menu .menu-inner { padding: 14px; }
         #layout-menu .menu-item .menu-link {
             color: rgba(255, 255, 255, 0.78);
@@ -146,6 +148,19 @@
             font-weight: 700;
             padding: 16px 14px 6px;
         }
+
+        /* ---------- Sidebar collapsed state ---------- */
+        body.sidebar-collapsed #layout-menu.layout-menu { width: 84px; }
+        body.sidebar-collapsed #layout-menu .app-brand { justify-content: center; padding-left: 0; padding-right: 0; }
+        body.sidebar-collapsed #layout-menu .app-brand-link,
+        body.sidebar-collapsed #layout-menu .menu-section-label,
+        body.sidebar-collapsed #layout-menu .menu-text { display: none; }
+        body.sidebar-collapsed #layout-menu .menu-inner { padding: 14px 8px; }
+        body.sidebar-collapsed #layout-menu .menu-inner > .menu-item { width: 100%; }
+        body.sidebar-collapsed #layout-menu .menu-item .menu-link { justify-content: center; padding: 11px 0; }
+        body.sidebar-collapsed #layout-menu .menu-item .menu-link > div { display: none; }
+        body.sidebar-collapsed .layout-menu-fixed .layout-page { padding-left: 84px; }
+        #layout-menu, .layout-page { transition: width 0.25s ease, padding-left 0.25s ease; }
 
         .navbar-nav-right {
             align-items: center;
@@ -204,5 +219,18 @@
     </div>
 </div>
 
+<!-- Sidebar toggle -->
+    <script>
+        document.querySelectorAll('.sidebar-toggle').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (window.innerWidth < 1200 && window.Helpers) {
+                    window.Helpers.toggleCollapsed();
+                } else {
+                    document.body.classList.toggle('sidebar-collapsed');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

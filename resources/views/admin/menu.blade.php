@@ -1,11 +1,9 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
     <div class="app-brand demo py-3 px-2 border-bottom">
+        <a href="javascript:void(0);" class="sidebar-toggle me-2"><i class="bx bx-menu bx-sm"></i></a>
         <a href="{{ route('admin.index') }}" class="app-brand-link d-flex align-items-center text-decoration-none">
             <span class="brand-logo-chip"><img src="{{ asset('images/logo.png') }}" alt="COTS Tracker Logo" style="height: 46px; width: auto;"></span>
             <span class="menu-text fw-bolder ms-3 fs-5">COTS Tracker</span>
-        </a>
-        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
     </div>
     <div class="menu-inner-shadow"></div>
