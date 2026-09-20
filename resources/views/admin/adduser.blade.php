@@ -1,14 +1,6 @@
 @extends('layouts.app')
 @section('content')
 
-<!-- Hero -->
-<div class="hero-section text-white" style="background: linear-gradient(135deg, #696cff 0%, #4a4fbf 50%, #8592a3 100%); padding: 56px 0;">
-    <div class="container">
-        <h1 style="font-weight: 700; margin: 0;">Manage Users</h1>
-        <p class="mb-0 mt-1" style="color: rgba(255,255,255,.85); font-size: 1.05rem;">Create, edit, and remove accounts for the COTS Tracker system.</p>
-    </div>
-</div>
-
 <div class="container mt-4">
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
