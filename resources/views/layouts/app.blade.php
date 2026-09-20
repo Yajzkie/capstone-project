@@ -93,6 +93,60 @@
             color: #333;
         }
 
+        /* ---------- Sidebar redesign ---------- */
+        #layout-menu.layout-menu {
+            background: linear-gradient(180deg, #0c315a 0%, #06203c 100%);
+            border-right: none;
+        }
+        #layout-menu .app-brand {
+            background: transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        #layout-menu .app-brand-link { color: #fff !important; }
+        #layout-menu .app-brand .menu-text { color: #fff; }
+        #layout-menu .brand-logo-chip {
+            background: #fff;
+            border-radius: 12px;
+            padding: 4px;
+            display: inline-flex;
+        }
+        #layout-menu .layout-menu-toggle {
+            background: rgba(255, 255, 255, 0.15) !important;
+            color: #fff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #layout-menu .menu-inner { padding: 14px; }
+        #layout-menu .menu-item .menu-link {
+            color: rgba(255, 255, 255, 0.78);
+            border-radius: 12px;
+            padding: 11px 14px;
+            margin-bottom: 4px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        #layout-menu .menu-item .menu-link:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff !important;
+        }
+        #layout-menu .menu-item.active .menu-link {
+            background: linear-gradient(135deg, #0ea5e9, #0056b3) !important;
+            color: #fff !important;
+            box-shadow: 0 6px 16px rgba(14, 165, 233, 0.35);
+        }
+        #layout-menu .menu-icon { color: inherit; }
+        #layout-menu .menu-section-label {
+            color: rgba(255, 255, 255, 0.45);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 16px 14px 6px;
+        }
+
         .navbar-nav-right {
             align-items: center;
             flex-basis: 100%;
