@@ -5,18 +5,20 @@ A web application for reporting and mapping **Crown-of-Thorns Seastar (COTS)** s
 ## Features
 
 - **Role-based access** — separate dashboards and permissions for `admin` and `user`.
-- **Map reporting** — submit COTS sightings with GPS coordinates via an interactive Leaflet map.
-- **Population breakdown** — log counts by life stage (early juvenile, juvenile, sub-adult, adult, late adult).
-- **Photo evidence** — attach multiple photos per sighting.
-- **Dashboard analytics** — COTS totals by municipality with charts.
+- **Map reporting wizard** — click the interactive Leaflet map to drop a pin, then submit a sighting through a 4-step guide (details → COTS count → activity/observer → location & media).
+- **Population breakdown** — log counts by life stage (early juvenile, juvenile, sub-adult, adult, late adult) with auto-calculated totals.
+- **Photo evidence** — attach multiple photos per sighting with inline previews.
+- **My sightings** — users track their own reports; admins see everything.
+- **Dashboard analytics** — COTS totals by municipality (donut) and monthly trend (bar chart), plus live map filters by municipality and date.
 - **Reports & export** — filter sightings by municipality and export to Excel.
-- **Geo data** — municipality and barangay management (PSGC-based).
+- **Geo data** — municipality and barangay options fetched from the PSGC API.
+- **Responsive UI** — marine-themed design, collapsible mobile sidebar, works on phones and desktops.
 
 ## Tech Stack
 
 - **Laravel 10** (PHP 8.1+)
 - **MySQL / MariaDB**
-- **Blade** templates with **Bootstrap 5**
+- **Blade** templates with **Bootstrap 5** / Sneat admin template
 - **Leaflet.js** for maps
 - **ApexCharts** for dashboard charts
 - **Maatwebsite/Laravel-Excel** for exports
