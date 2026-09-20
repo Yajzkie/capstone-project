@@ -2,89 +2,200 @@
 
 @section('content')
 <style>
-    /* Modal Overlay */
+    /* ---------- Sighting wizard modal theme ---------- */
+
+    /* Overlay */
     .modal.fade .modal-dialog {
-        transform: scale(0.8);
+        transform: translateY(14px);
         opacity: 0;
-        transition: transform 0.3s ease, opacity 0.3s ease;
+        transition: transform 0.28s ease, opacity 0.28s ease;
     }
     .modal.fade.show .modal-dialog {
-        transform: scale(1);
+        transform: translateY(0);
         opacity: 1;
     }
 
-    /* Modal Content */
+    /* Content */
     .modal-content {
-        border-radius: 12px;
         border: none;
-        padding: 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        background: linear-gradient(145deg, #f3f4f6, #ffffff);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 24px 64px rgba(6, 32, 60, 0.28);
     }
 
-    .modal-header p {
-    font-size: 0.9rem;
-    color: #ffffff;
-    margin: 0;
-    padding-top: 5px;
-    }
-
-
-    /* Modal Header */
+    /* Header */
     .modal-header {
-        background-color: #0056b3;
-        color: white;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
+        background: linear-gradient(135deg, #0c315a 0%, #06203c 55%, #0056b3 100%);
+        color: #fff;
         border-bottom: none;
-        padding: 16px 24px;
+        padding: 18px 24px;
+        align-items: center;
     }
     .modal-title {
-        font-weight: 600;
-        font-size: 1.25rem;
+        font-weight: 700;
+        font-size: 1.15rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .modal-header p {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.75);
+        margin: 0;
     }
     .btn-close {
-        color: white;
-        opacity: 0.8;
+        filter: invert(1) grayscale(100%) brightness(200%);
+        opacity: 0.75;
     }
-    .btn-close:hover {
-        opacity: 1;
-    }
+    .btn-close:hover { opacity: 1; }
 
-    /* Modal Form */
+    /* Body */
+    .modal-body { padding: 24px; }
+
+    /* Wizard stepper */
+    .wizard-steps {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 22px;
+        padding: 14px 10px;
+        background: #f4f7fb;
+        border-radius: 12px;
+    }
+    .wz-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        flex: 0 0 auto;
+        min-width: 52px;
+    }
+    .wz-dot {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        background: #dbe4ee;
+        color: #5c7387;
+        transition: all 0.2s ease;
+    }
+    .wz-step.active .wz-dot {
+        background: linear-gradient(135deg, #0ea5e9, #0056b3);
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(14, 165, 233, 0.35);
+    }
+    .wz-step.done .wz-dot {
+        background: #0ea5e9;
+        color: #fff;
+    }
+    .wz-label {
+        font-size: 0.68rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #8fa3b5;
+        white-space: nowrap;
+    }
+    .wz-step.active .wz-label,
+    .wz-step.done .wz-label { color: #0c315a; }
+    .wz-bar {
+        flex: 1 1 auto;
+        height: 2px;
+        margin-top: 14px;
+        background: #dbe4ee;
+        border-radius: 2px;
+    }
+    .wz-bar.done { background: linear-gradient(90deg, #0ea5e9, #0056b3); }
+
+    /* Form */
     .form-group label {
-        color: #333;
-        font-weight: 500;
+        color: #33475b;
+        font-weight: 600;
         margin-bottom: 8px;
+        font-size: 0.92rem;
     }
-    .form-control {
-        border-radius: 8px;
-        border: 1px solid #d1d5db;
-        transition: box-shadow 0.3s ease;
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 1px solid #dbe4ee;
+        padding: 10px 14px;
+        font-size: 0.95rem;
+        background: #fbfdff;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
-    .form-control:focus {
-        box-shadow: 0 0 8px rgba(0, 86, 179, 0.2);
+    .form-control:focus, .form-select:focus {
+        border-color: #0ea5e9;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
     }
 
-    /* Modal Buttons */
+    /* COTS count grid */
+    .count-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+    .count-grid .form-group { margin-bottom: 0; }
+    .total-box {
+        margin-top: 18px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #eef7ff, #e2eefc);
+        border: 1px solid #cfe4f6;
+    }
+    .total-box label { color: #0c315a; }
+
+    /* Location readout */
+    .loc-readout {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: #f4f7fb;
+        border: 1px dashed #c3d5e4;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+    .loc-readout i { color: #0056b3; font-size: 1.15rem; }
+
+    /* Photo previews */
+    #photo-previews img {
+        border-radius: 10px;
+        border: 2px solid #e2eefc;
+        object-fit: cover;
+    }
+
+    /* Footer */
+    .modal-footer {
+        border-top: 1px solid #eef2f7;
+        padding: 16px 24px;
+        gap: 10px;
+    }
+    .modal-footer .btn { border-radius: 9px; font-weight: 600; padding: 9px 20px; }
     .btn-primary {
-        background-color: #0056b3;
+        background: linear-gradient(135deg, #0ea5e9, #0056b3);
         border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
-        transition: background-color 0.3s ease;
+        transition: filter 0.2s ease, transform 0.2s ease;
     }
     .btn-primary:hover {
-        background-color: #004494;
+        background: linear-gradient(135deg, #0ea5e9, #0056b3);
+        filter: brightness(1.1);
+        transform: translateY(-1px);
     }
-    .btn-secondary {
+    .btn-secondary { background: #eef2f7; border: none; color: #33475b; }
+    .btn-secondary:hover { background: #e2e8f0; color: #0c315a; }
+    .btn-success {
+        background: linear-gradient(135deg, #10b981, #059669);
         border: none;
-        background-color: transparent;
-        color: #0056b3;
-        transition: color 0.3s ease;
+        transition: filter 0.2s ease, transform 0.2s ease;
     }
-    .btn-secondary:hover {
-        color: #004494;
+    .btn-success:hover {
+        background: linear-gradient(135deg, #10b981, #059669);
+        filter: brightness(1.1);
+        transform: translateY(-1px);
     }
 </style>
 
@@ -231,7 +342,7 @@
                     <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="consentModalLabel">Data Privacy Consent</h5>
+                                    <h5 class="modal-title" id="consentModalLabel"><i class="bx bx-shield-quarter"></i> Data Privacy Consent</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -277,34 +388,35 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal1Label">Sighting Details</h5>
+                    <h5 class="modal-title" id="modal1Label"><i class="bx bx-current-location"></i> Sighting Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                
 
                 <div class="modal-body">
+                    @include('partials.wizard-steps', ['activeStep' => 1])
+
                     <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="optional">
+                        <label for="name"><i class="bx bx-user"></i> Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Optional">
                     </div>
                     <div class="form-group">
-                        <label for="date_of_sighting">Date of COTS Sighting:</label>
+                        <label for="date_of_sighting"><i class="bx bx-calendar"></i> Date of COTS Sighting</label>
                         <input type="date" class="form-control" id="date_of_sighting" name="date_of_sighting" required>
                     </div>
                     <div class="form-group">
-                        <label for="time_of_sighting">Time of COTS Sighting:</label>
+                        <label for="time_of_sighting"><i class="bx bx-time-five"></i> Time of COTS Sighting</label>
                         <input type="time" class="form-control" id="time_of_sighting" name="time_of_sighting" required>
                     </div>
                     <div class="form-group">
-                        <label for="municipality">Municipality:</label>
-                        <select class="form-control" id="municipality" name="municipality" required>
+                        <label for="municipality"><i class="bx bx-map-alt"></i> Municipality</label>
+                        <select class="form-select" id="municipality" name="municipality" required>
                             <option value="">Select Municipality</option>
                             <!-- Municipalities will be populated here -->
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="barangay">Barangay:</label>
-                        <select class="form-control" id="barangay" name="barangay" required>
+                        <label for="barangay"><i class="bx bx-map-pin"></i> Barangay</label>
+                        <select class="form-select" id="barangay" name="barangay" required>
                             <option value="">Select Barangay</option>
                             <!-- Barangays will be populated here -->
                         </select>
@@ -312,8 +424,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="nextBtn1">Next</button>
-
+                    <button type="button" class="btn btn-primary" id="nextBtn1"><i class="bx bx-chevron-right"></i> Next</button>
                 </div>
             </div>
         </div>
@@ -324,38 +435,45 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal2Label">COTS Count</h5>
+                    <h5 class="modal-title" id="modal2Label"><i class="bx bx-analyse"></i> COTS Count</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="early_juvenile">1-5cm:</label>
-                        <input type="number" class="form-control" id="early_juvenile" name="early_juvenile" min="0">
+                    @include('partials.wizard-steps', ['activeStep' => 2])
+
+                    <div class="count-grid">
+                        <div class="form-group">
+                            <label for="early_juvenile"><i class="bx bx-ruler"></i> 1-5cm</label>
+                            <input type="number" class="form-control" id="early_juvenile" name="early_juvenile" min="0" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="juvenile"><i class="bx bx-ruler"></i> 6-15cm</label>
+                            <input type="number" class="form-control" id="juvenile" name="juvenile" min="0" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="sub_adult"><i class="bx bx-ruler"></i> 15-25cm</label>
+                            <input type="number" class="form-control" id="sub_adult" name="sub_adult" min="0" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="adult"><i class="bx bx-ruler"></i> 25-35cm</label>
+                            <input type="number" class="form-control" id="adult" name="adult" min="0" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="late_adult"><i class="bx bx-ruler"></i> &gt;35cm</label>
+                            <input type="number" class="form-control" id="late_adult" name="late_adult" min="0" placeholder="0">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="juvenile">6-15cm:</label>
-                        <input type="number" class="form-control" id="juvenile" name="juvenile" min="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="sub_adult">15-25cm:</label>
-                        <input type="number" class="form-control" id="sub_adult" name="sub_adult" min="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="adult">25-35cm:</label>
-                        <input type="number" class="form-control" id="adult" name="adult" min="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="late_adult">>35cm:</label>
-                        <input type="number" class="form-control" id="late_adult" name="late_adult" min="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="number_of_cots">Total COTS:</label>
-                        <input type="number" class="form-control" id="number_of_cots" name="number_of_cots" min="0">
+
+                    <div class="total-box">
+                        <div class="form-group mb-0">
+                            <label for="number_of_cots"><i class="bx bx-star"></i> Total COTS</label>
+                            <input type="number" class="form-control" id="number_of_cots" name="number_of_cots" min="0" placeholder="Auto-calculated" readonly>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="backBtn2">Back</button>
-                <button type="button" class="btn btn-primary" id="nextBtn2">Next</button>
+                    <button type="button" class="btn btn-secondary" id="backBtn2"><i class="bx bx-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary" id="nextBtn2">Next <i class="bx bx-chevron-right"></i></button>
                 </div>
             </div>
         </div>
@@ -366,13 +484,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal3Label">Activity & Observer Info</h5>
+                    <h5 class="modal-title" id="modal3Label"><i class="bx bx-group"></i> Activity & Observer Info</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    @include('partials.wizard-steps', ['activeStep' => 3])
+
                     <div class="form-group">
-                        <label for="activity_type">Type of Activity:</label>
-                        <select class="form-control" id="activity_type" name="activity_type" required>
+                        <label for="activity_type"><i class="bx bx-category-alt"></i> Type of Activity</label>
+                        <select class="form-select" id="activity_type" name="activity_type" required>
                             <option value="">Select Activity</option>
                             <option value="Fishing">Fishing</option>
                             <option value="Recreational diving">Recreational Diving</option>
@@ -382,9 +502,9 @@
                         </select>
                         <input type="text" class="form-control mt-2 d-none" id="custom_activity" name="custom_activity" placeholder="Please specify activity">
                     </div>
-                    <div class="form-group">
-                        <label for="observer_category">Observer Category:</label>
-                        <select class="form-control" id="observer_category" name="observer_category" required>
+                    <div class="form-group mt-3">
+                        <label for="observer_category"><i class="bx bx-user-pin"></i> Observer Category</label>
+                        <select class="form-select" id="observer_category" name="observer_category" required>
                             <option value="">Select Observer</option>
                             <option value="Fisherfolks">Fisherfolks</option>
                             <option value="Barangay residents">Barangay Residents</option>
@@ -397,8 +517,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="backBtn3">Back</button>
-                <button type="button" class="btn btn-primary" id="nextBtn3">Next</button>
+                    <button type="button" class="btn btn-secondary" id="backBtn3"><i class="bx bx-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary" id="nextBtn3">Next <i class="bx bx-chevron-right"></i></button>
                 </div>
             </div>
         </div>
@@ -409,34 +529,35 @@
         <div class="modal-dialog"> 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal4Label">Location & Media</h5>
+                    <h5 class="modal-title" id="modal4Label"><i class="bx bx-camera"></i> Location & Media</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Latitude:</label>
-                        <p id="latitude_display">Not selected</p>
-                        <input type="hidden" id="latitude" name="latitude" required>
-                    </div>
+                    @include('partials.wizard-steps', ['activeStep' => 4])
 
                     <div class="form-group">
-                        <label>Longitude:</label>
-                        <p id="longitude_display">Not selected</p>
+                        <label><i class="bx bx-current-location"></i> Selected Location</label>
+                        <div class="loc-readout">
+                            <i class="bx bx-map-pin"></i>
+                            <span><strong>Lat:</strong> <span id="latitude_display">Not selected</span> &nbsp;&bull;&nbsp; <strong>Lng:</strong> <span id="longitude_display">Not selected</span></span>
+                        </div>
+                        <input type="hidden" id="latitude" name="latitude" required>
                         <input type="hidden" id="longitude" name="longitude" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="photo">Photos:</label>
+                        <label for="photo"><i class="bx bx-image-alt"></i> Photos</label>
                         <input type="file" class="form-control" id="photo" name="photo[]" accept="image/*" multiple>
+                        <div id="photo-previews" class="d-flex flex-wrap mt-2"></div>
                     </div>
                     <div class="form-group">
-                        <label for="description">Additional Comments:</label>
-                        <textarea class="form-control" id="description" name="description"></textarea>
+                        <label for="description"><i class="bx bx-message-rounded-detail"></i> Additional Comments</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="backBtn4">Back</button>
-                <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-secondary" id="backBtn4"><i class="bx bx-chevron-left"></i> Back</button>
+                    <button type="submit" class="btn btn-success"><i class="bx bx-check"></i> Submit</button>
                 </div>
                 </form>   
             </div>
