@@ -17,30 +17,6 @@
 <div class="content-wrapper">
     <div class="container d-flex justify-content-center align-items-center flex-column mt-5">
 
-        <!-- Date range filter -->
-        <div class="row w-100 justify-content-center">
-            <div class="col-md-12 mb-4">
-                <div class="card shadow-lg rounded-lg" style="border: none;">
-                    <div class="card-body">
-                        <form method="GET" action="{{ route('admin.index') }}" class="row g-3 align-items-end">
-                            <div class="col-md-4">
-                                <label for="from" class="form-label">From</label>
-                                <input type="date" id="from" name="from" value="{{ $from }}" class="form-control">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="to" class="form-label">To</label>
-                                <input type="date" id="to" name="to" value="{{ $to }}" class="form-control">
-                            </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary">Apply</button>
-                                <a href="{{ route('admin.index') }}" class="btn btn-outline-secondary">Clear</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Stat cards -->
         <div class="row w-100 justify-content-center g-3">
 
