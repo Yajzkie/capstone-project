@@ -88,6 +88,16 @@
     }
 </style>
 
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+        <i class="bx bx-check-circle fs-5 me-2"></i>
+        <div>
+            <strong>Sighting uploaded!</strong> {{ session('success') }}
+        </div>
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <div class="page-header">
     <h1>COTS Sighting Map</h1>
     <p class="description">View all reported Crown-of-thorns Starfish (COTS) Sightings on the interactive map. Help protect our reefs by adding pin to report new sighting in your area.</p>
