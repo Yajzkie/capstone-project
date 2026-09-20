@@ -13,7 +13,8 @@ class UserLocationController extends Controller
     {
         $locations = Location::all();
         $municipalities = Municipality::all();  // Retrieve all municipalities
-        return view('user.index', compact('locations', 'municipalities'));  // Pass municipalities to the view
+        $mySightings = Location::where('user_id', auth()->id())->latest()->get();
+        return view('user.index', compact('locations', 'municipalities', 'mySightings'));  // Pass to the view
     }
 
     public function store(Request $request)
@@ -54,6 +55,7 @@ class UserLocationController extends Controller
     
         // Create a new location using the request data
         Location::create([
+            'user_id' => auth()->id(),
             'name' => $request->name ?? null,
             'description' => $request->description ?? null,
             'latitude' => $request->latitude,

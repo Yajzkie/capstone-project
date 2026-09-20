@@ -98,15 +98,135 @@
     </div>
 @endif
 
-<div class="page-header">
-    <h1>COTS Sighting Map</h1>
-    <p class="description">View all reported Crown-of-thorns Starfish (COTS) Sightings on the interactive map. Help protect our reefs by adding pin to report new sighting in your area.</p>
+<!-- Hero header -->
+<div class="card hero-card mb-4">
+    <div class="card-body p-4 p-md-5 text-white">
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="hero-chip2"><i class="bx bx-map-alt"></i> Live sightings map</span>
+            <span class="hero-chip2"><i class="bx bx-current-location"></i> Report by placing a pin</span>
+            <span class="hero-chip2"><i class="bx bx-shield-quarter"></i> Helps protect coral reefs</span>
+        </div>
+        <h1 class="mb-2" style="font-weight: 800;">COTS Sighting Map</h1>
+        <p class="mb-0 text-white-50" style="max-width: 660px;">
+            View all reported Crown-of-Thorns Starfish (COTS) sightings on the interactive map.
+            Help protect our reefs by clicking the map to place a pin and reporting a new sighting in your area.
+        </p>
+    </div>
 </div>
+
+<style>
+    .hero-card {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        background: linear-gradient(120deg, #001e3c 0%, #00447a 60%, #0a5bac 100%);
+    }
+    .hero-chip2 {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #fff;
+        border-radius: 50rem;
+        padding: 5px 12px;
+        font-size: 0.8rem;
+    }
+    .content-card {
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 8px 24px rgba(0, 40, 80, 0.08);
+    }
+    #map {
+        height: 520px;
+        border-radius: 14px;
+        z-index: 0;
+    }
+    @media (max-width: 767.98px) {
+        #map { height: 380px; }
+    }
+</style>
 
 <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
                 <div class="content-wrapper">
-                 <div id="map" style="height: 80%; position: relative; margin: 0 auto; "></div>
+                    <!-- Map card with filters -->
+                    <div class="card content-card mb-4">
+                        <div class="card-body p-3 p-md-4">
+                            <div class="d-flex flex-wrap gap-2 align-items-end mb-3">
+                                <div class="flex-grow-1" style="min-width: 180px;">
+                                    <label for="filterMunicipality" class="form-label small text-muted mb-1">Filter by Municipality</label>
+                                    <select class="form-select" id="filterMunicipality" onchange="applyFilters()">
+                                        <option value="">All municipalities</option>
+                                        @foreach($locations->pluck('municipality')->filter()->unique()->sort() as $municipalityName)
+                                        <option value="{{ $municipalityName }}">{{ $municipalityName }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div style="min-width: 180px;">
+                                    <label for="filterDate" class="form-label small text-muted mb-1">Filter by Date</label>
+                                    <input type="date" class="form-control" id="filterDate" onchange="applyFilters()">
+                                </div>
+                                <button type="button" class="btn btn-outline-secondary" onclick="clearFilters()">
+                                    <i class="bx bx-reset"></i> Reset
+                                </button>
+                                <span id="filterCount" class="text-muted small ms-auto mb-2"></span>
+                            </div>
+                            <div id="map"></div>
+                        </div>
+                    </div>
+
+                    <!-- My Sightings -->
+                    <div class="card content-card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0" style="font-weight: 700;">My Sighting Reports</h5>
+                            <span class="badge rounded-pill text-white" style="background: #0056b3;">{{ $mySightings->count() }}</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Location</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>COTS Count</th>
+                                        <th>Photo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @forelse($mySightings as $sighting)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            {{ $sighting->barangay }}
+                                            @if($sighting->municipality), {{ $sighting->municipality }}@endif
+                                        </td>
+                                        <td>{{ $sighting->date_of_sighting }}</td>
+                                        <td>{{ $sighting->time_of_sighting }}</td>
+                                        <td><span class="fw-semibold">{{ $sighting->number_of_cots ?: 0 }}</span></td>
+                                        <td>
+                                            @php $sightingPhotos = json_decode($sighting->photo ?? '', true) ?: []; @endphp
+                                            @if(!empty($sightingPhotos[0]))
+                                                <img src="{{ asset('storage/' . $sightingPhotos[0]) }}" width="52" height="52" style="object-fit: cover; border-radius: 10px;">
+                                            @else
+                                                <span class="text-muted">&mdash;</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-5">
+                                            <i class="bx bx-current-location fs-1"></i>
+                                            <p class="mt-2 mb-0">You haven't reported any sightings yet.<br>
+                                                Click on the map to place a pin and submit your first report!</p>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                  <div class="modal fade" id="consentModal" tabindex="-1" aria-labelledby="consentModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                             <div class="modal-content">
@@ -538,9 +658,40 @@ var polygon = L.geoJSON(geoJsonPolygon, {
 map.fitBounds(polygon.getBounds());
 
     // Loop through each location from the backend and add markers
+    var sightingsGroup = L.featureGroup().addTo(map);
+    var sightings = [];
+
     @foreach ($locations as $location)
-        var marker{{ $location->id }} = L.marker([{{ $location->latitude }}, {{ $location->longitude }}]).addTo(map);
+    sightings.push({
+        municipality: @json($location->municipality),
+        date: @json($location->date_of_sighting),
+        marker: L.marker([{{ $location->latitude }}, {{ $location->longitude }}]).bindTooltip('{{ addslashes($location->name ?: $location->barangay) }}')
+    });
     @endforeach
+
+    function applyFilters() {
+        var m = document.getElementById('filterMunicipality').value;
+        var d = document.getElementById('filterDate').value;
+        var shown = 0;
+        sightings.forEach(function (s) {
+            var match = (!m || s.municipality === m) && (!d || s.date === d);
+            if (match) {
+                sightingsGroup.addLayer(s.marker);
+                shown++;
+            } else {
+                sightingsGroup.removeLayer(s.marker);
+            }
+        });
+        document.getElementById('filterCount').textContent = shown + ' of ' + sightings.length + ' sightings';
+    }
+
+    function clearFilters() {
+        document.getElementById('filterMunicipality').value = '';
+        document.getElementById('filterDate').value = '';
+        applyFilters();
+    }
+
+    applyFilters();
 
 // Global marker variable for new markers
 var marker;
