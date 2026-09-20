@@ -34,7 +34,6 @@ Route::middleware('admin')->group(function () {
 
 
     // User Management Routes
-    Route::get('/admin/adduser/create', [UserController::class, 'create'])->name('admin.adduser.create');
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.adduser');
 
 
@@ -46,7 +45,7 @@ Route::middleware('admin')->group(function () {
 
 
     // Optional: User resource routes
-    Route::resource('users', UserController::class)->except(['show']);
+    Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 // User dashboard routes

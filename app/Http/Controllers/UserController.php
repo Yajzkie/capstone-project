@@ -68,16 +68,4 @@ class UserController extends Controller
 
         return redirect()->route('admin.adduser')->with('success', 'User updated successfully.');
     }
-
-    public function create()
-    {
-        $roles = Role::all(); // Fetch all roles from the database
-        return view('admin.adduser', compact('roles')); // Return the view with roles data
-    }
-
-    public function edit(User $user)
-    {
-        $roles = Role::all(); // Fetch all roles
-        return view('admin.adduser', compact('user', 'roles')); // Return the view with user and roles data
-    }
 }
