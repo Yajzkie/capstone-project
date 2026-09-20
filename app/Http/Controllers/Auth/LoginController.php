@@ -21,7 +21,8 @@ class LoginController extends Controller
      */
     public function index()
     {
-        return view('auth.login');
+        $locations = \App\Models\Location::all();
+        return view('auth.login', compact('locations'));
     }
 
     /**

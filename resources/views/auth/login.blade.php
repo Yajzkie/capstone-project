@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet">
     <style>
         html { scroll-behavior: smooth; }
 
@@ -155,6 +156,13 @@
             box-shadow: 0 8px 24px rgba(0, 40, 80, 0.08);
             padding: 22px 26px;
         }
+
+        .about #map {
+            height: 340px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 40, 80, 0.12);
+            z-index: 0;
+        }
     </style>
 </head>
 <body>
@@ -268,7 +276,7 @@
         <!-- Map + description -->
         <div class="row g-5 align-items-center mb-5">
             <div class="col-lg-4 text-center">
-                <div class="card-img"><img src="{{ asset('images/maps.png') }}" class="img-fluid w-100" alt="Map of Southern Leyte"></div>
+                <div id="map"></div>
             </div>
             <div class="col-lg-8">
                 <p class="lead-text">
@@ -302,6 +310,26 @@
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([10.306812602471465, 125.00810623168947], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var group = L.featureGroup().addTo(map);
+
+    @foreach ($locations as $location)
+        L.marker([{{ $location->latitude }}, {{ $location->longitude }}])
+            .addTo(group)
+            .bindTooltip('{{ addslashes($location->name ?: $location->barangay) }}');
+    @endforeach
+
+    if (group.getLayers().length) {
+        map.fitBounds(group.getBounds().pad(0.2));
+    }
+</script>
 <script>
     // Show/hide password
     document.getElementById('togglePass').addEventListener('click', function () {
