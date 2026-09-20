@@ -122,6 +122,7 @@
             flex-shrink: 0;
         }
         #layout-menu .sidebar-toggle:hover { background: rgba(255, 255, 255, 0.25); }
+        @media (min-width: 1200px) { #layout-menu .sidebar-toggle { display: none; } }
         #layout-menu .menu-inner { padding: 14px; }
         #layout-menu .menu-item .menu-link {
             color: rgba(255, 255, 255, 0.78);
@@ -149,18 +150,28 @@
             padding: 16px 14px 6px;
         }
 
-        /* ---------- Sidebar collapsed state ---------- */
-        body.sidebar-collapsed #layout-menu.layout-menu { width: 84px; }
-        body.sidebar-collapsed #layout-menu .app-brand { justify-content: center; padding-left: 0; padding-right: 0; }
-        body.sidebar-collapsed #layout-menu .app-brand-link,
-        body.sidebar-collapsed #layout-menu .menu-section-label,
-        body.sidebar-collapsed #layout-menu .menu-text { display: none; }
-        body.sidebar-collapsed #layout-menu .menu-inner { padding: 14px 8px; }
-        body.sidebar-collapsed #layout-menu .menu-inner > .menu-item { width: 100%; }
-        body.sidebar-collapsed #layout-menu .menu-item .menu-link { justify-content: center; padding: 11px 0; }
-        body.sidebar-collapsed #layout-menu .menu-item .menu-link > div { display: none; }
-        body.sidebar-collapsed .layout-menu-fixed .layout-page { padding-left: 84px; }
-        #layout-menu, .layout-page { transition: width 0.25s ease, padding-left 0.25s ease; }
+        /* ---------- Mobile hamburger ---------- */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            z-index: 1040;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0ea5e9, #0056b3);
+            color: #fff;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(0, 40, 80, 0.4);
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+        .mobile-menu-toggle:hover { filter: brightness(1.1); }
+        @media (max-width: 1199.98px) {
+            .mobile-menu-toggle { display: inline-flex; }
+            .layout-page { padding-top: 60px !important; }
+        }
 
         .navbar-nav-right {
             align-items: center;
@@ -219,16 +230,14 @@
     </div>
 </div>
 
-<!-- Sidebar toggle -->
+<!-- Mobile hamburger -->
+    <a href="javascript:void(0);" class="sidebar-toggle mobile-menu-toggle" aria-label="Toggle menu"><i class="bx bx-menu bx-lg"></i></a>
+
     <script>
         document.querySelectorAll('.sidebar-toggle').forEach(function (btn) {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
-                if (window.innerWidth < 1200 && window.Helpers) {
-                    window.Helpers.toggleCollapsed();
-                } else {
-                    document.body.classList.toggle('sidebar-collapsed');
-                }
+                if (window.Helpers) window.Helpers.toggleCollapsed();
             });
         });
     </script>
