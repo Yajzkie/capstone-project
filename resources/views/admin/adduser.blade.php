@@ -6,30 +6,34 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <!-- Add New User -->
+    <!-- Single User Form (Add / Edit) -->
     <div class="card shadow-sm mb-4" style="border: none;">
-        <h5 class="card-header" style="font-weight: 600;">Add New User</h5>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 style="font-weight: 600; margin: 0;" id="userFormTitle">Add New User</h5>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="resetFormBtn" style="display: none;" onclick="resetUserForm()">Cancel Edit</button>
+        </div>
         <div class="card-body">
-            <form action="{{ route('users.store') }}" method="POST" autocomplete="off">
+            <form id="userForm" method="POST" action="{{ route('users.store') }}" autocomplete="off">
                 @csrf
+                <input type="hidden" name="_method" id="methodField" value="">
                 <div class="row g-3">
-                    <div class="col-md-3">
+                    <div class="col-md-2 mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" name="name" autocomplete="off" required>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2 mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" autocomplete="off" required>
                     </div>
-                    <div class="col-md-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" required>
+                    <div class="col-md-2 mb-3">
+                        <label for="password" class="form-label" id="passwordLabel">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" autocomplete="new-password">
                     </div>
-                    <div class="col-md-3">
-                        <label for="password_confirmation" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required>
+                    <div class="col-md-2 mb-3">
+                        <label for="password_confirmation" class="form-label" id="passwordConfirmationLabel">Confirm Password</label>
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2 mb-3">
                         <label for="role" class="form-label">Role</label>
                         <select class="form-select" id="role" name="role_id" required>
                             <option value="">Select Role</option>
@@ -38,8 +42,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary">Add User</button>
+                    <div class="col-md-2 mb-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary" id="userFormSubmit">Add User</button>
                     </div>
                 </div>
             </form>
@@ -69,7 +73,12 @@
                     <td>{{ $user->email }}</td>
                     <td><span class="badge text-white" style="background: #696cff;">{{ $user->role->role_name }}</span></td>
                     <td>
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="collapse" data-bs-target="#editUser{{ $user->id }}" aria-expanded="false" aria-controls="editUser{{ $user->id }}">
+                        <button type="button" class="btn btn-warning btn-sm"
+                                data-id="{{ $user->id }}"
+                                data-name="{{ $user->name }}"
+                                data-email="{{ $user->email }}"
+                                data-role="{{ $user->role_id }}"
+                                onclick="editUser(this)">
                             <i class="bx bx-edit"></i>
                         </button>
 
@@ -82,41 +91,56 @@
                         </form>
                     </td>
                 </tr>
-                <tr class="collapse" id="editUser{{ $user->id }}">
-                    <td colspan="4" class="p-3" style="background: #f8f9fa;">
-                        <h6 class="mb-3">Edit: {{ $user->name }}</h6>
-                        <form action="{{ route('users.update', $user->id) }}" method="POST" autocomplete="off">
-                            @csrf
-                            @method('PUT')
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="editName{{ $user->id }}" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="editName{{ $user->id }}" name="name" value="{{ $user->name }}" autocomplete="off" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="editEmail{{ $user->id }}" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="editEmail{{ $user->id }}" name="email" value="{{ $user->email }}" autocomplete="off" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="editPassword{{ $user->id }}" class="form-label">New Password <span class="text-muted">(blank = unchanged)</span></label>
-                                    <input type="password" class="form-control" id="editPassword{{ $user->id }}" name="password" autocomplete="new-password">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="editPasswordConfirmation{{ $user->id }}" class="form-label">Confirm New Password</label>
-                                    <input type="password" class="form-control" id="editPasswordConfirmation{{ $user->id }}" name="password_confirmation" autocomplete="new-password">
-                                </div>
-                            </div>
-                            <div class="mt-3">
-                                <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
-                                <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#editUser{{ $user->id }}">Close</button>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
                 @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<script>
+    function editUser(btn) {
+        var f = document.getElementById('userForm');
+        var editing = btn.getAttribute('data-id');
+
+        document.getElementById('methodField').value = 'PUT';
+        document.getElementById('userFormTitle').textContent = 'Edit User';
+        document.getElementById('passwordLabel').textContent = 'New Password (blank = unchanged)';
+        document.getElementById('passwordConfirmationLabel').innerHTML = 'Confirm New Password';
+        document.getElementById('userFormSubmit').textContent = 'Save Changes';
+        document.getElementById('resetFormBtn').style.display = 'inline-block';
+
+        document.getElementById('name').value = btn.getAttribute('data-name');
+        document.getElementById('email').value = btn.getAttribute('data-email');
+        document.getElementById('role').value = btn.getAttribute('data-role');
+        document.getElementById('password').value = '';
+        document.getElementById('password').required = false;
+        document.getElementById('password_confirmation').value = '';
+        document.getElementById('password_confirmation').required = false;
+
+        f.action = '/users/' + editing;
+        f.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetUserForm() {
+        var f = document.getElementById('userForm');
+
+        document.getElementById('methodField').value = '';
+        document.getElementById('userFormTitle').textContent = 'Add New User';
+        document.getElementById('passwordLabel').textContent = 'Password';
+        document.getElementById('passwordConfirmationLabel').textContent = 'Confirm Password';
+        document.getElementById('userFormSubmit').textContent = 'Add User';
+        document.getElementById('resetFormBtn').style.display = 'none';
+
+        document.getElementById('name').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('role').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('password').required = true;
+        document.getElementById('password_confirmation').value = '';
+        document.getElementById('password_confirmation').required = true;
+
+        f.action = "{{ route('users.store') }}";
+    }
+</script>
 @endsection

@@ -55,10 +55,12 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->role_id = $request->role_id;
 
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
