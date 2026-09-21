@@ -14,6 +14,20 @@ A web application for reporting and mapping **Crown-of-Thorns Seastar (COTS)** s
 - **Geo data** — municipality and barangay options fetched from the PSGC API.
 - **Responsive UI** — marine-themed design, collapsible mobile sidebar, works on phones and desktops.
 
+## Screenshots
+
+| Admin dashboard | Sighting report map |
+|---|---|
+| ![Admin dashboard](screenshots/admin_dashboard.png) | ![Sighting report map](screenshots/admin_sighting.png) |
+
+| Report generation | User dashboard |
+|---|---|
+| ![Report generation](screenshots/admin_report.png) | ![User dashboard](screenshots/user_dashboard2.png) |
+
+| Excel export | User management |
+|---|---|
+| ![Excel export](screenshots/download.png) | ![User management](screenshots/admin_manageUser.png) |
+
 ## Tech Stack
 
 - **Laravel 10** (PHP 8.1+)
