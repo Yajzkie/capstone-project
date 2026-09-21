@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: capstone-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: capstone_proj
+    ports:
+      - "3307:3306"
+    volumes:
+      - capstone-db:/var/lib/mysql
+
+volumes:
+  capstone-db:
